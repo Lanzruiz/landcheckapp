@@ -11,9 +11,9 @@ const handleResponse = (res, status, message, data = null ) => {
 };
 
 export const createProperty = async (req, res, next) => {
-   const { name, email } = req.body;
+   const { nameOfProperty, numberOfBeds, price, propertyType } = req.body;
    try {
-     const newProperty = await createPropertyService(name, email);
+     const newProperty = await createPropertyService(nameOfProperty, numberOfBeds, price, propertyType);
      handleResponse(res, 201, "Property created successfully", newProperty);
    } catch (error) {
      next(error);
@@ -52,7 +52,7 @@ export const getPropertyById = async (req, res, next) => {
 
 export const updateProperty = async (req, res, next) => {
    const { id } = req.params;
-   const { name, email } = req.body;
+   const { nameOfProperty, numberOfBeds, price, propertyType } = req.body;
    try {
      const property = await getPropertyByIdService(id);
      if (!property) {

@@ -3,7 +3,7 @@ import pool from "../config/db.js";
 const createPropertyTable = async () => {
     const queryText = `CREATE TABLE IF NOT EXISTS properties (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    nameOfProperty VARCHAR(100) NOT NULL,
+    nameOfProperty VARCHAR(100) UNIQUE NOT NULL,
     numberOfBeds INTEGER NOT NULL,
     price INTEGER NOT NULL,
     propertyType VARCHAR(50) NOT NULL,

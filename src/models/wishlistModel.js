@@ -9,6 +9,11 @@ export const getWishlistByIdService = async (id) => {
     return result.rows[0];
 };
 
+export const getWishlistByUserIdPropertyIdService = async (userID, propertyID) => {
+    const result = await pool.query("SELECT * FROM wishlists where userID = $1 and propertyID = $2", [userID, propertyID]);
+    return result.rows[0];
+};
+
 export const createWishlistService = async (userID, propertyID) => {
     const result = await pool.query("INSERT INTO wishlists (userID, propertyID) VALUES ($1, $2) RETURNING *", [userID, propertyID]);
     return result.rows[0];
