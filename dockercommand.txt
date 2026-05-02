@@ -1,0 +1,18 @@
+docker run --name postgres-local \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=secret \
+  -e POSTGRES_DB=landcheckdb \
+  -p 5433:5432 \
+  -d postgres
+
+docker exec -it postgres-local psql -U postgres
+
+
+supabase account
+
+password = C5SqwJcP2hTb3e3W
+
+npm install @supabase/supabase-js
+
+VITE_SUPABASE_URL=https://ilrvmiucdtqckamqnufm.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_Ar-l0DEiuY0zDqqwAzvw2g_mIHch_gH

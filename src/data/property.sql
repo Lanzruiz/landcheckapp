@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS properties (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    nameOfProperty VARCHAR(100) NOT NULL,
+    numberOfBeds INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    propertyType VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
