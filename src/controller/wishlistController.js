@@ -1,4 +1,4 @@
-import { createWishlistService, getAllWishlistService, getWishlistByIdService, deleteWishlistService, getWishlistByUserIdPropertyIdService } from "../models/wishlistModel.js";
+import { createWishlistService, getAllWishlistService, getWishlistByIdService, deleteWishlistService, getWishlistByUserIdPropertyIdService, getWishlistByUserIdService } from "../models/wishlistModel.js";
 
 // Standardized response function
 
@@ -43,6 +43,21 @@ export const getWishlistById = async (req, res, next) => {
    const { id } = req.params;
    try {
      const wishlist = await getWishlistByIdService(id);
+     if (!wishlist) {
+       return handleResponse(res, 404, "Wishlist not found");
+     }
+     handleResponse(res, 200, "Wishlist retrieved successfully", wishlist);
+   } catch (error) {
+     next(error);
+   }
+    
+
+}
+
+export const getWishlistByUserId = async (req, res, next) => {
+   const { userID } = req.params;
+   try {
+     const wishlist = await getWishlistByUserIdService(userID);
      if (!wishlist) {
        return handleResponse(res, 404, "Wishlist not found");
      }

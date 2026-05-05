@@ -5,7 +5,7 @@ dotenv.config();
 
 const SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-const authenticateToken = (req, res, next) => {
+const auth = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -22,4 +22,4 @@ const authenticateToken = (req, res, next) => {
     }
 }
 
-export default authenticateToken;
+export default auth;

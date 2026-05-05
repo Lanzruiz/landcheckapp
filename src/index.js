@@ -10,6 +10,7 @@ import propertyRouter from "./routes/propertyRoutes.js";
 import createPropertyTable from "./data/createPropertyTable.js";
 import wishlistRouter from "./routes/wishlistRoutes.js";
 import createWishlistTable from "./data/createWishlistTable.js";
+import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use("/api/", [userRoutes, propertyRouter, wishlistRouter]);
+app.use("/api/", [userRoutes, propertyRouter, wishlistRouter, authRouter]);
 
 
 // Error handling middleware
