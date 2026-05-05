@@ -1,4 +1,9 @@
-import { createUserService, deleteUserService, getAllUserService, getUserByIdService, updateUserService } from "../models/userModel.js";
+import { createUserService, deleteUserService, getAllUserService, getUserByEmailService, getUserByIdService, updateUserService } from "../models/userModel.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Standardized response function
 
@@ -13,8 +18,29 @@ const handleResponse = (res, status, message, data = null ) => {
 export const createUser = async (req, res, next) => {
    const { name, email, password } = req.body;
    try {
-     const newUser = await createUserService(name, email, password);
-     handleResponse(res, 201, "User created successfully", newUser);
+
+     const checkUser = await getUserByEmailService(email); 
+     
+     if(checkUser) {
+           return handleResponse(res, 400, "User already exists", newUser);
+     }
+
+     const salt = await bcrypt.genSalt(10)
+     const encryptedPassword = await bcrypt.hash(password, salt);
+     const newUser = await createUserService(name, email, encryptedPassword);
+
+     const payload = {
+            user: {
+               id: newUser.id,
+            }
+      }
+           
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+           if(err)  throw err;
+           res.json({ token })
+           handleResponse(res, 201, "User created successfully", token);
+      })
+
    } catch (error) {
      next(error);
    }

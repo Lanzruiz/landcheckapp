@@ -1,7 +1,22 @@
 
 import { body } from "express-validator";
 
-const createUserValidation = [
+export const createUserValidation = [
+  body("email")
+    .isEmail()
+    .withMessage("Must be a valid email"),
+
+  body("name")
+    .notEmpty()
+    .withMessage("Name is required"),
+
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+];
+
+
+export const loginUserValidation = [
   body("email")
     .isEmail()
     .withMessage("Must be a valid email"),
@@ -11,4 +26,5 @@ const createUserValidation = [
     .withMessage("Password must be at least 6 characters long"),
 ];
 
-export default createUserValidation;
+
+

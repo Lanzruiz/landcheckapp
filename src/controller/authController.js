@@ -1,5 +1,10 @@
-import { createWishlistService, getAllWishlistService, getWishlistByIdService, deleteWishlistService, getWishlistByUserIdPropertyIdService, getWishlistByUserIdService } from "../models/wishlistModel.js";
 
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { getUserByEmailService } from "../models/userModel.js";
+
+dotenv.config();
 // Standardized response function
 
 const handleResponse = (res, status, message, data = null ) => {
@@ -10,31 +15,40 @@ const handleResponse = (res, status, message, data = null ) => {
     });
 };
 
-export const register = async (req, res, next) => {
-   const { userID, propertyID } = req.body;
-   try {
 
-     const wishlist = await getWishlistByUserIdPropertyIdService(userID, propertyID);
-     if (wishlist) {
-       return handleResponse(res, 400, "Wishlist already exists");
+export const loginUser = async (req, res, next) => {
+      const { email, password } = req.body;
+     try {
+  
+       const checkUser = await getUserByEmailService(email); 
+       
+       if(!checkUser) {
+             return handleResponse(res, 400, "Invalid credentials", null);
+       }
+
+       const isMatch = await bcrypt.compare(password, checkUser.password)
+
+        if(!isMatch) {
+            return handleResponse(res, 400, "Invalid credentials", null);
+        }
+
+  
+       const payload = {
+              user: {
+                 id: checkUser.id,
+              }
+        }
+             
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+             if(err)  throw err;
+             res.json({ token })
+             handleResponse(res, 201, "User created successfully", token);
+        })
+  
+     } catch (error) {
+       next(error);
      }
-     const newWishlist = await createWishlistService(userID, propertyID);
-     handleResponse(res, 201, "Wishlist created successfully", newWishlist);
-   } catch (error) {
-     next(error);
-   }
     
 
-}
-
-export const login = async (req, res, next) => {
-   try {
-     const wishlists = await getAllWishlistService();
-     handleResponse(res, 200, "Wishlists retrieved successfully", wishlists);
-   } catch (error) {
-     next(error);
-   }
-    
-
-}
+};
 
