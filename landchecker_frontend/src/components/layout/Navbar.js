@@ -4,19 +4,19 @@ const Navbar = () => {
   return (
     <nav class="navbar bg-dark">
       <h1>
-        <a href="index.html">
+        <a href="/">
           <i class="fas fa-code"></i> PropertyConnector
         </a>
       </h1>
       <ul>
         <li>
-          <a href="profiles.html">Properties</a>
+          <a href="/properties">Properties</a>
         </li>
         <li>
-          <a href="register.html">Register</a>
+          <a href="/register">Register</a>
         </li>
         <li>
-          <a href="login.html">Login</a>
+          <a href="/login">Login</a>
         </li>
       </ul>
     </nav>
