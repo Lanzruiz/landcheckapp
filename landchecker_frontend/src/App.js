@@ -6,20 +6,26 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Properties from "./components/pages/properties";
 import Dashboard from "./components/pages/dashboard";
+// Redux
+import { Provider } from "react-redux";
+import store from "./components/state/store";
+
 import "./App.css";
 
 function App() {
   return (
-    <Fragment>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/properties" element={<Properties />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Fragment>
+    <Provider store={store}>
+      <Fragment>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Fragment>
+    </Provider>
   );
 }
 
