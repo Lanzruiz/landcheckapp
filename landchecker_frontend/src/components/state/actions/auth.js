@@ -1,6 +1,39 @@
 import axios from "axios";
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR } from "../../../type";
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+} from "../../../type";
 import { setAlert } from "./alert";
+import setAuthToken from "../../utils/setAuthToken";
+
+// Load User
+export const loadUser = () => async (dispatch) => {
+  if (localStorage.getItem("token")) {
+    setAuthToken(localStorage.getItem("token"));
+  }
+
+   const config = {
+      headers: {
+        "x-auth-token": localStorage.getItem("token"),
+      },
+    };
+
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/auth`, config
+    );
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data.data.user,
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
+};
 
 // Register User
 export const register =
@@ -27,8 +60,10 @@ export const register =
     } catch (err) {
       const errors = err.response.data.errors;
 
-      if(errors) {
-         errors.forEach((error) => dispatch(setAlert(error.msg, 'danger', 3000)));
+      if (errors) {
+        errors.forEach((error) =>
+          dispatch(setAlert(error.msg, "danger", 3000)),
+        );
       }
 
       dispatch({
@@ -38,5 +73,3 @@ export const register =
       dispatch(setAlert("Account is already registered", "danger", 3000));
     }
   };
-
-  
