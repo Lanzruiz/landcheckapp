@@ -37,7 +37,11 @@ const Login = () => {
       );
       console.log(res.data);
     } catch (error) {
-      console.error(error.response.data);
+      if (error.response && error.response.data) {
+        console.error(error.response.data);
+      } else {
+        console.error('An error occurred:', error.message);
+      }
     }
   };
   return (
