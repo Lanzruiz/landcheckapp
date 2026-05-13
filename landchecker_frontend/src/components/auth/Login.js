@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAlert } from "../state/actions/alert";
+import Alert from "../layout/Alert";
+import { login } from "../state/actions/auth";
+import PropTypes from "prop-types";
 
-const Login = () => {
+const Login = ({ setAlert, login, isAuthenticated}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,40 +21,24 @@ const Login = () => {
     e.preventDefault();
     // Handle form submission logic here
 
-    const user = {
-      email,
-      password,
-    };
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const body = JSON.stringify(user);
-
-      const res = await axios.post(
-        "http://localhost:5001/api/login",
-        body,
-        config,
-      );
-      console.log(res.data);
-    } catch (error) {
-      if (error.response && error.response.data) {
-        console.error(error.response.data);
-      } else {
-        console.error('An error occurred:', error.message);
-      }
+   if (!password || !email) {
+      setAlert("You should provide the credentials", "danger", 3000);
+    } else {
+      login({ email, password });
     }
   };
+
+  if( isAuthenticated) {
+    return <Navigate to="/dashboard" />
+  }
   return (
     <section className="container">
-      <div className="alert alert-danger">Invalid credentials</div>
+       <Alert />
       <h1 className="large text-primary">Sign In</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Sign into Your Account
       </p>
+      
       <form className="form" onSubmit={onSubmit}>
         <div className="form-group">
           <input
@@ -59,7 +47,7 @@ const Login = () => {
             name="email"
             value={email}
             onChange={(e) => onChange(e)}
-            required
+  
           />
         </div>
         <div className="form-group">
@@ -69,7 +57,7 @@ const Login = () => {
             name="password"
             value={password}
             onChange={(e) => onChange(e)}
-            required
+    
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Login" />
@@ -81,4 +69,14 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { setAlert, login })(Login);

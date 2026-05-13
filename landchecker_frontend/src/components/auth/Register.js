@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAlert } from "../state/actions/alert";
 import Alert from "../layout/Alert";
 import { register } from "../state/actions/auth";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,11 +25,13 @@ const Register = ({ setAlert, register }) => {
     if (password !== password2) {
       setAlert("Passwords do not match", "danger", 3000);
     } else {
-    
-        register({ name, email, password });
-     
+      register({ name, email, password });
     }
   };
+
+   if( isAuthenticated) {
+      return <Navigate to="/dashboard" />
+    }
 
   return (
     <section className="container">
@@ -91,6 +93,11 @@ const Register = ({ setAlert, register }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert, register })(Register);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { setAlert, register })(Register);
