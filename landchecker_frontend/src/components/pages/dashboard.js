@@ -1,6 +1,13 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Dashboard = () => {
+const Dashboard = ({isAuthenticated}) => {
+
+     if( !isAuthenticated) {
+        return <Navigate to="/login" />
+      }
   return (
     <section className="container">
       <h1 className="large text-primary">Dashboard</h1>
@@ -81,4 +88,13 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+
+Dashboard.propTypes = {
+  isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps)(Dashboard);

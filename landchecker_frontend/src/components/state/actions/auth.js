@@ -6,6 +6,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "../../../type";
 import { setAlert } from "./alert";
 import setAuthToken from "../../utils/setAuthToken";
@@ -117,3 +118,8 @@ export const login =
       dispatch(setAlert("Invalid credentials", "danger", 3000));
     }
   };
+
+// Logout User
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
+};
